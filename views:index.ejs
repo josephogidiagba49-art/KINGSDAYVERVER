@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🩸 MagicSender Ultimate RedTeam God Mode v5</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root{--blood:#ff0040;--void:#0a0a0a;--plasma:#ff004466;--neon:#00ffaa;--gold:#ffd700}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'JetBrains Mono',monospace}
+    body{background:radial-gradient(ellipse at center,var(--void) 0%,#000 70%);color:#fff;min-height:100vh;overflow-x:hidden}
+    .container{max-width:1800px;margin:auto;padding:20px}
+    .header{position:relative;text-align:center;margin-bottom:50px;overflow:hidden}
+    .header h1{font-size:4.2em;background:linear-gradient(45deg,var(--blood),var(--gold),var(--neon));background-size:300% 300%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 60px var(--plasma);animation:ultimateGlitch 4s infinite,gradientShift 3s infinite}
+    @keyframes ultimateGlitch{0%,100%{transform:translate(0)}15%{transform:translate(-3px,3px) skew(2deg)}30%{transform:translate(3px,-3px) skew(-1deg)}45%{transform:translate(-2px,2px) skew(1deg)}}
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .god-card{background:linear-gradient(145deg,rgba(10,10,10,.95),rgba(0,0,0,.98));backdrop-filter:blur(40px);border:3px solid var(--plasma);border-radius:25px;padding:40px;margin:30px 0;box-shadow:0 40px 100px rgba(255,0,64,.25),inset 0 1px 0 rgba(255,255,255,.1)}
+    .matrix-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:35px;margin:35px 0}
+    .stat-cell{text-align:center;padding:35px;background:linear-gradient(145deg,rgba(255,0,64,.18),rgba(0,255,170,.12));border:2px solid var(--plasma);border-radius:20px;transition:all .5s;position:relative;overflow:hidden}
+    .stat-cell::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .6s}
+    .stat-cell:hover::before{left:100%}
+    .stat-cell:hover{transform:translateY(-15px) scale(1.06);box-shadow:0 50px 120px rgba(255,0,64,.5)}
+    .god-number{font-size:4.5em;font-weight:900;background:linear-gradient(45deg,var(--blood),var(--gold));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.8}}
+    textarea,input{width:100%;background:rgba(0,0,0,.9);border:3px solid var(--plasma);color:#fff;padding:25px;border-radius:18px;font-size:16px;font-family:inherit;resize:vertical;transition:all .5s;margin:20px 0}
+    textarea:focus,input:focus{outline:none;border-color:var(--blood);box-shadow:0 0 40px var(--plasma)}
+    .god-controls{display:grid;grid-template-columns:1fr 1fr 280px;gap:30px;align-items:end;margin:40px 0}
+    .btn-ultimate{background:linear-gradient(45deg,var(--blood),#cc0033,var(--gold));color:#fff;border:none;padding:30px 70px;font-size:24px;font-weight:900;border-radius:80px;cursor:pointer;transition:all .6s;box-shadow:0 25px 60px rgba(255,0,64,.6);text-transform:uppercase;letter-spacing:5px;position:relative;overflow:hidden;text-shadow:0 3px 15px rgba(0,0,0,.7)}
+    .btn-ultimate:hover{transform:translateY(-15px) scale(1.1);box-shadow:0 45px 100px rgba(255,0,64,.8)}
+    .btn-ultimate:active{transform:translateY(-5px)}
+    .btn-ultimate:disabled{opacity:.4;cursor:not-allowed}
+    .progress-ultimate{background:rgba(0,0,0,.8);height:25px;border-radius:15px;overflow:hidden;margin:30px 0;border:3px solid var(--plasma);position:relative}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--blood),var(--gold),var(--neon));transition:width 1s cubic-bezier(0.68,-0.55,0.265,1.55);box-shadow:0 0 50px var(--blood);position:relative}
+    .progress-fill::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);animation:ultimateShimmer 2s infinite}
+    @keyframes ultimateShimmer{0%{left:-100%}100%{left:100%}}
+    #god-log{height:550px;overflow-y:auto;background:rgba(0,0,0,.99);border:4px solid var(--plasma);padding:35px;border-radius:25px;font-size:16px;line-height:1.9;margin-top:30px}
+    .log-ultimate{padding:20px;margin:15px 0;background:linear-gradient(145deg,rgba(255,0,64,.15),rgba(0,255,170,.1));border-radius:20px;border-left:8px solid var(--blood);animation:ultimateSlide .5s ease;white-space:pre-wrap;box-shadow:0 10px 30px rgba(255,0,64,.2)}
+    @keyframes ultimateSlide{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+    .templates-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:30px;margin:40px 0}
+    .template-ultimate{background:rgba(0,255,170,.15);border:4px solid var(--neon);border-radius:25px;padding:35px;cursor:pointer;transition:all .5s;position:relative;overflow:hidden}
+    .template-ultimate:hover{background:rgba(0,255,170,.3);transform:translateY(-12px) scale(1.03);box-shadow:0 35px 80px rgba(0,255,170,.4)}
+    .template-ultimate.active{border-color:var(--blood);box-shadow:0 0 60px var(--blood)}
+    .lead-stats{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0}
+    .stat-box{background:rgba(255,215,0,.15);border:2px solid var(--gold);padding:20px;border-radius:15px;text-align:center}
+    @media(max-width:1200px){.god-controls{grid-template-columns:1fr}}
+    @media(max-width:768px){.header h1{font-size:2.8em}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🩸 <strong>MagicSender</strong> <span style="color:var(--neon)">Ultimate</span> <strong>RedTeam</strong> <span style="color:var(--gold)">God Mode v5</span></h1>
+      <p style="font-size:1.5em;margin-top:20px"><em>ABSOLUTE SUCCESS • 50x Providers • AI Lead Parser • Enterprise Obliterator</em></p>
+    </div>
+
+    <div class="god-card">
+      <div class="matrix-stats" id="matrix">
+        <div class="stat-cell">
+          <div class="god-number" id="totalSent">0</div>
+          <div>Total Obliterated</div>
+        </div>
+        <div class="stat-cell">
+          <div class="god-number" id="successRate">0%</div>
+          <div>Success Rate</div>
+        </div>
+        <div class="stat-cell">
+          <div class="god-number" id="providers">0/50</div>
+          <div>Providers Active</div>
+        </div>
+        <div class="stat-cell">
+          <div class="god-number" id="parsedLeads">0</div>
+          <div>Leads Parsed</div>
+        </div>
+        <div class="stat-cell">
+          <div class="god-number" id="campaigns">0</div>
+          <div>Campaigns</div>
+        </div>
+        <div class="stat-cell">
+          <div class="god-number" id="aiTemplates">0</div>
+          <div>AI Templates</div>
+        </div>
+      </div>
+      <div class="progress-ultimate">
+        <div class="progress-fill" id="godProgress" style="width:0%"></div>
+      </div>
+      <div style="text-align:center;font-size:1.6em;margin:25px 0;font-weight:700" id="godETA">-</div>
+    </div>
+
+    <div class="god-card">
+      <h3 style="margin-bottom:30px;font-size:1.7em">🎯 <span style="color:var(--blood)">ULTIMATE LEAD ACQUISITION</span></h3>
+      <p style="color:#ccc;margin-bottom:20px;font-size:15px">AI Lead Parser extracts emails from ANY format (CSV, TXT, HTML, PDFs, scraped data, etc)</p>
+      <textarea id="rawLeads" rows="8" placeholder="Paste ANYTHING with emails:
+admin@enterprise.com
+ceo@fortune500.com, ciso@victim.org
+{'emails':['user@target.com','hr@corp.net']}
+HTML tables, scraped data, PDFs, CSVs - AI handles ALL formats!"></textarea>
+      <div class="lead-stats">
+        <div class="stat-box">
+          <div style="font-size:2.5em;color:var(--gold)" id="leadsParsed">0</div>
+          <div>Leads Parsed</div>
+        </div>
+        <div class="stat-box">
+          <div style="font-size:2.5em;color:var(--neon)" id="leadsValid">0</div>
+          <div>Valid Emails</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="god-card">
+      <h3 style="margin-bottom:30px;font-size:1.7em">🧬 <span style="color:var(--neon)">ULTIMATE TEMPLATES + AI</span></h3>
+      <div class="templates-grid">
+        <div class="template-ultimate" onclick="loadUltimateTemplate('exec-apocalypse')">
+          <h4>👑 Executive Apocalypse</h4>
+          <p>AI-Generated Executive templates (98% open rate)</p>
+        </div>
+        <div class="template-ultimate" onclick="loadUltimateTemplate('finance-nuke')">
+          <h4>💥 Finance Nuke + Invoices</h4>
+          <p>Payment urgency + invoice spoofing</p>
+        </div>
+        <div class="template-ultimate" onclick="loadUltimateTemplate('ciso-zero-day')">
+          <h4>🚨 CISO Zero-Day + MFA</h4>
+          <p>Security professional destroyer</p>
+        </div>
+        <div class="template-ultimate" onclick="loadUltimateTemplate('hr-emergency')">
+          <h4>⚠️ HR Emergency + Payroll</h4>
+          <p>Tax/IRS/payroll urgency templates</p>
+        </div>
+        <div class="template-ultimate" onclick="loadUltimateTemplate('ai-auto')">
+          <h4>🤖 AI AUTO-GENERATE</h4>
+          <p>Fully automatic AI templates per target</p>
+        </div>
+        <div class="template-ultimate" onclick="loadUltimateTemplate('raw-html')">
+          <h4>⚙️ RAW HTML + Variables</h4>
+          <p>100% Custom HTML Editor</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:25px;margin:35px 0">
+        <input type="text" id="godSubject" placeholder="🚨 ULTIMATE: {{target}} - IMMEDIATE ACTION REQUIRED">
+        <input type="url" id="godPhish" placeholder="https://your-ultimate-c2.com/phish/{{target}}/{{campaign}}">
+        <label style="align-self:center;font-size:15px">
+          <input type="checkbox" id="stealthMode" style="width:auto;margin-right:12px;transform:scale(1.6)"> Stealth Mode (Anti-Detection)
+        </label>
+      </div>
+      <textarea id="godHTML" rows="12" placeholder="Full HTML w/ {{target}}, {{phish}}, {{campaign}}, {{id}}, {{sender}} - AI fills gaps!"></textarea>
+    </div>
+
+    <div class="god-card" style="text-align:center">
+      <div class="god-controls">
+        <div>
+          <input type="number" id="godBurst" value="50" min="20" max="200" style="width:auto;padding:25px 30px">
+          <label style="font-size:15px;display:block;margin-top:12px">Burst Size (Ultimate Optimized)</label>
+        </div>
+        <div>
+          <input type="password" id="godKey" value="ULTIMATE-REDTEAM-GODMODE-2026-ABSOLUTE" placeholder="Ultimate God Key">
+          <label style="font-size:15px;display:block;margin-top:12px">God Mode Authentication</label>
+        </div>
+        <div>
+          <button class="btn-ultimate" onclick="ULTIMATE_APOCALYPSE()" id="godBtn">🩸 EXECUTE ULTIMATE APOCALYPSE</button>
+        </div>
+      </div>
+      <div style="margin-top:45px;display:flex;justify-content:center;gap:25px;flex-wrap:wrap">
+        <button class="btn-ultimate" onclick="resetUltimateMode()" style="padding:25px 55px;font-size:20px">🔄 TOTAL SYSTEM RESET</button>
+        <button class="btn-ultimate" onclick="downloadUltimateReport()" style="padding:25px 55px;font-size:20px;background:linear-gradient(45deg,var(--neon),#00cc88)">📊 ULTIMATE AAR REPORT</button>
+        <button class="btn-ultimate" onclick="parseLeadsPreview()" style="padding:25px 55px;font-size:20px;background:linear-gradient(45deg,var(--gold),#ffaa00)">🔍 PARSE LEADS PREVIEW</button>
+      </div>
+    </div>
+
+    <div class="god-card">
+      <h3 style="margin-bottom:25px;font-size:1.7em">💀 <span style="color:var(--blood)">ULTIMATE COMMAND CENTER</span> (Live Feed)</h3>
+      <div id="godLog"></div>
+    </div>
+  </div>
+
+  <script>
+    // 🩸 ULTIMATE REDTEAM GOD MODE v5 JAVASCRIPT
+    const ultimateTemplates = {
+      'exec-apocalypse': {
+        subject: "👑 EXECUTIVE ACTION REQUIRED: {{target}} - IMMEDIATE VERIFICATION",
+        html: `<div style="font-family:'Segoe UI',sans-serif;max-width:650px;margin:0 auto;background:#f8f9fa;padding:50px;border-radius:25px">
+  <div style="background:linear-gradient(45deg,#dc3545,#ff6b6b);color:white;padding:40px;text-align:center;border-radius:20px">
+    <h2 style="font-size:36px;margin:0">EXECUTIVE VERIFICATION REQUIRED</h2>
+    <p style="font-size:18px;font-weight:500;margin:10px 0 0">Corporate Security Operations</p>
+  </div>
+  <div style="background:#fff;padding:45px;margin:40px 0;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.15)">
+    <h3 style="color:#dc3545;font-size:28px;margin-bottom:25px">URGENT: {{target}}</h3>
+    <p style="font-size:18px;line-height:1.8">Executive privileges require immediate verification due to detected anomalies.</p>
+    <div style="text-align:center;margin:50px 0">
+      <a href="{{phish}}" style="background:linear-gradient(45deg,#dc3545,#c82333);color:white;padding:30px 80px;text-decoration:none;border-radius:15px;font-weight:900;font-size:22px;display:inline-block;box-shadow:0 20px 50px rgba(220,53,69,.5)">🔐 VERIFY EXECUTIVE ACCESS NOW</a>
+    </div>
+  </div>
+</div>`
+      }
+    };
+
+    let ultimateActive = false;
+    
+    // 🔍 LEAD PARSER PREVIEW
+    async function parseLeadsPreview() {
+      const raw = document.getElementById('rawLeads').value;
+      if(!raw.trim()) return godLog('❌ No leads to parse');
+      
+      godLog('🔍 Parsing leads with AI Ultimate Parser...');
+      try {
+        const res = await fetch('/api/redteam/parse', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({rawLeads: raw.slice(0,10000)})
+        });
+        const data = await res.json();
+        document.getElementById('leadsParsed').textContent = data.total || 0;
+        document.getElementById('leadsValid').textContent = data.valid || 0;
+        godLog(`✅ PARSED: ${data.total || 0} → VALID: ${data.valid || 0} emails extracted`);
+      } catch(e) {
+        godLog('❌ Parse preview failed');
+      }
+    }
+
+    async function ULTIMATE_APOCALYPSE() {
+      if(ultimateActive) return;
+      
+      const rawLeads = document.getElementById('rawLeads').value.trim();
+      if(!rawLeads) {
+        alert('🩸 ACQUIRE RAW LEADS FIRST!');
+        return;
+      }
+      
+      ultimateActive = true;
+      const btn = document.getElementById('godBtn');
+      btn.disabled = true;
+      btn.innerHTML = '⚔️ ULTIMATE MODE ACTIVE | OBLITERATING...';
+      
+      godLog('🩸 ULTIMATE REDTEAM APOCALYPSE v5 INITIATED');
+      godLog(`🎯 RAW LEADS DETECTED | STEALTH: ${document.getElementById('stealthMode').checked}`);
+
+      const payload = {
+        key: document.getElementById('godKey').value,
+        rawLeads,
+        template: {
+          subject: document.getElementById('godSubject').value,
+          html: document.getElementById('godHTML').value
+        },
+        phishLink: document.getElementById('godPhish').value,
+        stealth: document.getElementById('stealthMode').checked,
+        burstSize: parseInt(document.getElementById('godBurst').value)
+      };
+
+      try {
+        const response = await fetch('/api/redteam/ultimate', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while(true) {
+          const {done, value} = await reader.read();
+          if(done) break;
+          
+          const chunk = decoder.decode(value);
+          const events = chunk.split('\n\n');
+          
+          for(const event of events) {
+            if(event.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(event.slice(6));
+                if(data.progress !== undefined) {
+                  document.getElementById('godProgress').style.width = data.progress + '%';
+                  document.getElementById('godETA').textContent = `ETA: ${data.eta}`;
+                  godLog(`⚔️ ${data.campaignId} | ${data.provider} | ${data.success}/${data.batch} | ${data.progress}% (${data.totalSent} total)`);
+                }
+                if(data.done) {
+                  godLog(`🩸 ULTIMATE APOCALYPSE COMPLETE | ${data.campaignId} | TOTAL: ${data.finalStats.totalSent.toLocaleString()}`);
+                  btn.innerHTML = '✅ ULTIMATE VICTORY ACHIEVED';
+                }
+                if(data.error) {
+                  godLog(`❌ ERROR: ${data.error}`);
+                }
+              } catch(e) {}
+            }
+          }
+        }
+      } catch(error) {
+        godLog(`❌ APOCALYPSE FAILED: ${error.message}`);
+      } finally {
+        ultimateActive = false;
+        btn.disabled = false;
+        btn.innerHTML = '🩸 EXECUTE ULTIMATE APOCALYPSE';
+      }
+    }
+
+    function godLog(message) {
+      const log = document.getElementById('godLog');
+      const entry = document.createElement('div');
+      entry.className = 'log-ultimate';
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function loadUltimateTemplate(name) {
+      const template = ultimateTemplates[name];
+      if(template) {
+        document.getElementById('godSubject').value = template.subject;
+        document.getElementById('godHTML').value = template.html;
+        document.querySelectorAll('.template-ultimate').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+      }
+    }
+
+    function resetUltimateMode() {
+      location.reload();
+    }
+
+    async function downloadUltimateReport() {
+      const a = document.createElement('a');
+      a.href = '/api/redteam/report';
+      a.download = `Ultimate-RedTeam-v5-${new Date().toISOString().slice(0,10)}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Live Ultimate C2 Feed
+    setInterval(async () => {
+      try {
+        const res = await fetch('/api/redteam/stats');
+        const stats = await res.json();
+        document.getElementById('totalSent').textContent = stats.totalSent?.toLocaleString() || 0;
+        document.getElementById('successRate').textContent = stats.successRate || '0%';
+        document.getElementById('providers').textContent = `${stats.providersUsed?.size || 0}/50`;
+        document.getElementById('parsedLeads').textContent = stats.parsedLeads?.toLocaleString() || 0;
+        document.getElementById('campaigns').textContent = stats.campaigns || 0;
+        document.getElementById('aiTemplates').textContent = stats.aiTemplatesUsed || 0;
+      } catch(e) {}
+    }, 1500);
+
+    // Auto-parse preview on input
+    document.getElementById('rawLeads').addEventListener('input', function() {
+      setTimeout(parseLeadsPreview, 1000);
+    });
+  </script>
+</body>
+</html>
